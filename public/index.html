@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    car: <input type="text" name="" placeholder="Enter your car here..." id="car">
+    <br/><br/>car: <input type="text" name="" placeholder="Enter your car here..." id="car">
+    <br/><br/>car: <input type="text" name="" placeholder="Enter your car here..." id="car">
+    <button onclick="park()">Park</button>
+    <h1>Parking:</h1>
+    <table border="1">
+        <thead>
+            <th>index</th>
+            <th>car</th>
+        </thead>
+        <tbody id="parking">
+        </tbody>
+    </table>
+    <script src="http://localhost:5000/socket.io.min.js"
+        integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"
+        crossorigin="anonymous"></script>
+    <script>
+        let index = 0;
+        const socket = io("http://localhost:5000");
+        const park = () => {
+
+            let car = {
+                index,
+                value: document.querySelector("#car").value
+            };
+
+            //pour envoyer l'action parking au serveur
+            socket.emit("parking", car);
+        }
+        //pour récupérer l'action parked depuis le serveur
+        socket.on("parked", (car) => {
+            document.getElementById("parking").innerHTML += `<tr><td>${car.index}</td><td>${car.value}</td></tr>`;
+            index++;
+        })
+    </script>
+</body>
+
+</html>
